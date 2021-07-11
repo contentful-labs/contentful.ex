@@ -4,17 +4,13 @@ defmodule Contentful.Delivery.LocalesTest do
   alias Contentful.Delivery.Locales
   alias Contentful.Locale
 
-  use ExVCR.Mock, adapter: ExVCR.Adapter.Hackney
+  use ExVCR.Mock, adapter: ExVCR.Adapter.Httpc
 
   import Contentful.Query
 
   @space_id "bmehzfuz4raf"
   @env "master"
   @access_token nil
-
-  setup_all do
-    HTTPoison.start()
-  end
 
   setup do
     ExVCR.Config.filter_request_headers("authorization")

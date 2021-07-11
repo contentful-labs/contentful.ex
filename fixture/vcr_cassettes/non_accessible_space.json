@@ -41,7 +41,11 @@
         "Vary": "Accept-Encoding",
         "x-contentful-request-id": "675521d2-eea4-45c9-b401-0dcb6ea28734"
       },
-      "status_code": 401,
+      "status_code": [
+        "HTTP/1.1",
+        401,
+        "Unauthorized"
+      ],
       "type": "ok"
     }
   }

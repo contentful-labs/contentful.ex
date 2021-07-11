@@ -6,14 +6,10 @@ defmodule Contentful.Delivery.SpacesTest do
 
   import Contentful.Query
 
-  use ExVCR.Mock, adapter: ExVCR.Adapter.Hackney
+  use ExVCR.Mock, adapter: ExVCR.Adapter.Httpc
 
   @space_id "bmehzfuz4raf"
   @access_token "a token"
-
-  setup_all do
-    HTTPoison.start()
-  end
 
   setup do
     ExVCR.Config.filter_request_headers("authorization")

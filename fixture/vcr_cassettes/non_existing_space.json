@@ -37,7 +37,11 @@
         "X-Cache-Hits": "1",
         "x-contentful-request-id": "23a60342-ccc3-4b27-9560-3a925e6d18c0"
       },
-      "status_code": 404,
+      "status_code": [
+        "HTTP/1.1",
+        404,
+        "Not Found"
+      ],
       "type": "ok"
     }
   }

@@ -43,7 +43,11 @@
         "Vary": "Accept-Encoding",
         "x-contentful-request-id": "e3e1f078-9e21-4000-84e2-6b8fd4b17875"
       },
-      "status_code": 200,
+      "status_code": [
+        "HTTP/1.1",
+        200,
+        "OK"
+      ],
       "type": "ok"
     }
   }

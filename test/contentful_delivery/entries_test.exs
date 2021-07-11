@@ -4,7 +4,7 @@ defmodule Contentful.Delivery.EntriesTest do
   alias Contentful.Delivery.Entries
   alias Contentful.{ContentType, Entry, Space, SysData}
 
-  use ExVCR.Mock, adapter: ExVCR.Adapter.Hackney
+  use ExVCR.Mock, adapter: ExVCR.Adapter.Httpc
 
   import Contentful.Query
 
@@ -12,10 +12,6 @@ defmodule Contentful.Delivery.EntriesTest do
   @entry_id "5UeyMKZrmqMYyMMJvCP3Ls"
   @env "master"
   @access_token nil
-
-  setup_all do
-    HTTPoison.start()
-  end
 
   setup do
     ExVCR.Config.filter_request_headers("authorization")

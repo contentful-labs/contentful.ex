@@ -3,7 +3,7 @@ defmodule Contentful.Delivery.AssetsTest do
   alias Contentful.{Asset, SysData}
   alias Contentful.Delivery.Assets
 
-  use ExVCR.Mock, adapter: ExVCR.Adapter.Hackney
+  use ExVCR.Mock, adapter: ExVCR.Adapter.Httpc
 
   import Contentful.Query
 
@@ -11,10 +11,6 @@ defmodule Contentful.Delivery.AssetsTest do
   @env "master"
   @asset_id "577fpmbIfYD71VCjCpYA84"
   @access_token nil
-
-  setup_all do
-    HTTPoison.start()
-  end
 
   setup do
     ExVCR.Config.filter_request_headers("authorization")

@@ -93,11 +93,11 @@ defmodule Contentful.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [
-      {:httpoison, "~> 1.6"},
+      {:tesla, "~> 1.4"},
       {:jason, "~> 1.1"},
 
       # dev / test
-      {:exvcr, "~> 0.11", only: :test},
+      {:exvcr, "~> 0.12", only: :test},
       {:dogma, "~> 0.1", only: :dev},
       {:ex_doc, "~> 0.21", only: :dev, runtime: false},
       {:dialyxir, "~> 1.1.0", only: [:dev], runtime: false},

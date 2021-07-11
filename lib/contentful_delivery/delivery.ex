@@ -124,15 +124,31 @@ defmodule Contentful.Delivery do
   """
 
   import Contentful.Misc, only: [fallback: 2]
-  import HTTPoison, only: [get: 2]
 
   alias Contentful.Configuration
-  alias HTTPoison.Response
 
   @endpoint "cdn.contentful.com"
   @preview_endpoint "preview.contentful.com"
   @protocol "https"
   @separator "/"
+
+  @doc """
+  Constructs a new Tesla client for requests.
+
+  Can be overridden with a custom client:
+
+  ```
+  # config/config.exs
+  config :contentful, client: MyApp.CustomClient
+  ```
+  """
+  @spec client :: Tesla.Client.t()
+  def client do
+    case Contentful.http_client do
+      Tesla -> Tesla.client([])
+      mod -> mod.client()
+    end
+  end
 
   @doc """
   Gets the json library for the Contentful Delivery API based
@@ -212,23 +228,23 @@ defmodule Contentful.Delivery do
   end
 
   @doc """
-  Sends a request against the CDA. It's really just a wrapper around `HTTPoison.get/2`
+  Sends a request against the CDA. It's really just a wrapper around `Tesla.get/3`
   """
-  @spec send_request({binary(), any()}) :: {:error, HTTPoison.Error.t()} | {:ok, Response.t()}
+  @spec send_request({binary(), any()}) :: Tesla.Env.result()
   def send_request({url, headers}) do
-    get(url, headers)
+    Tesla.get(client(), url, headers: headers)
   end
 
   @doc """
   Parses the response from the CDA and triggers a callback on success
   """
-  @spec parse_response({:ok, Response.t()}, fun()) ::
+  @spec parse_response({:ok, Tesla.Env.t()}, fun()) ::
           {:ok, struct()}
           | {:ok, list(struct()), total: non_neg_integer()}
           | {:error, :rate_limit_exceeded, wait_for: integer()}
           | {:error, atom(), original_message: String.t()}
   def parse_response(
-        {:ok, %Response{status_code: code, body: body} = resp},
+        {:ok, %Tesla.Env{status: code, body: body} = resp},
         callback
       ) do
     case code do
@@ -250,7 +266,7 @@ defmodule Contentful.Delivery do
   catch_all for any errors during flight (connection loss, etc.)
   """
   @spec parse_response({:error, any()}, fun()) :: {:error, :unknown}
-  def parse_response({:error, _}, _callback) do
+  def parse_response({:error, error}, _callback) do
     build_error()
   end
 
@@ -267,10 +283,10 @@ defmodule Contentful.Delivery do
   @doc """
     Used for the rate limit exceeded error, as it gives the user extra information on wait times
   """
-  @spec build_error(Response.t()) ::
+  @spec build_error(Tesla.Env.t()) ::
           {:error, :rate_limit_exceeded, wait_for: integer()}
-  def build_error(%Response{
-        status_code: 429,
+  def build_error(%Tesla.Env{
+        status: 429,
         headers: [{"x-contentful-rate-limit-exceeded", seconds}, _]
       }) do
     {:error, :rate_limit_exceeded, wait_for: seconds}

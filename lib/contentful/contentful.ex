@@ -72,4 +72,34 @@ defmodule Contentful do
       lib -> lib
     end
   end
+
+  @doc """
+  The `Tesla.client` module to use.
+
+  By default, Contentful uses the standard `Tesla.client`. This can be
+  overridden in config to use a custom dynamic client so that
+  behaviour can be modified in runtime.
+
+  ## Examples
+      # in lib/myapp/logging_client.ex
+      defmodule LoggingClient do
+        # build dynamic client based on runtime arguments
+        def client do
+          middleware = [
+            {Tesla.Middleware.Logger, debug: false}
+          ]
+          Tesla.client(middleware)
+        end
+      end
+
+      # in config/config.exs
+      config :contentful, http_client: LoggingClient
+  """
+  @spec http_client() :: module()
+  def http_client do
+    case Application.get_env(:contentful, :http_client) do
+      nil -> Tesla
+      lib -> lib
+    end
+  end
 end
