@@ -29,7 +29,7 @@ jobs:
           ${{ runner.os }}-mix-${{matrix.otp}}-${{matrix.elixir}}-
           ${{ runner.os }}-mix-${{matrix.otp}}-
           ${{ runner.os }}-mix-
-    - uses: erlef/setup-beam@v1.7.2
+    - uses: erlef/setup-beam@v1.8.2
       with:
         otp-version: ${{matrix.otp}}
         elixir-version: ${{matrix.elixir}}
@@ -57,7 +57,7 @@ jobs:
         key: ${{ runner.os }}-checks-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
         restore-keys: |
           ${{ runner.os }}-checks-
-    - uses: erlef/setup-beam@v1.7.2
+    - uses: erlef/setup-beam@v1.8.2
       with:
         otp-version: 23
         elixir-version: '1.11'
